@@ -30,7 +30,7 @@ const MyChats = ({ fetchAgain }) => {
         socket.on('user online', (onlineUsers) => {
             setOnlineUsers(onlineUsers);
         });
-    }, []);
+    }, [user]);
   
     console.log("Onlines",onlineUsers);
 

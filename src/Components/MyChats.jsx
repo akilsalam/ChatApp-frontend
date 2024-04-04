@@ -99,18 +99,19 @@ const MyChats = ({ fetchAgain }) => {
             <Box
               paddingBottom={3}
               paddingLeft={3}
-              fontSize={{ base: "28px", md: "30px" }}
+              fontSize={{ base: "20px", md: "30px" }}
               fontFamily="Work Sans"
+              
               display="flex"
               width="100%"
               justifyContent="space-between"
               alignItems="center"
             >
-              My Chats
+              Chats
               <GroupChatModel>
               <Button
                 display={'flex'}
-                fontSize={{ base: "17px", md: "10px", lg: "17px"}}
+                fontSize={{ base: "15px", md: "10px", lg: "17px"}}
                 rightIcon={<IoIosAdd />}
                 >
                 New Group Chat

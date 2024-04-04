@@ -10,11 +10,11 @@ import { CiImageOn } from "react-icons/ci";
 import io from "socket.io-client"
 import { MdOutlineKeyboardVoice } from "react-icons/md";
 import { MdOutlineMessage } from "react-icons/md";
+import END_POINT from "../server"
 
 
+const socket = io(END_POINT);
 
-const ENDPOINT = "http://localhost:5000"; // Update with your server's URL
-const socket = io(ENDPOINT);
 
 const MyChats = ({ fetchAgain }) => {
     const [loggedUser, setLoggedUser] = useState();
@@ -32,10 +32,8 @@ const MyChats = ({ fetchAgain }) => {
         });
     }, [user]);
   
-    console.log("Onlines",onlineUsers);
 
     const fetchChats = async () => {
-      console.log(user._id);
       try {
         const config = {
           headers: {
@@ -43,8 +41,7 @@ const MyChats = ({ fetchAgain }) => {
           },
         };
   
-        const { data } = await axios.get("http://localhost:5000/api/chat", config);
-        console.log(data);
+        const { data } = await axios.get(`${END_POINT}/api/chat`, config);
         setChats(data);
       } catch (error) {
         toast({
@@ -206,11 +203,9 @@ const MyChats = ({ fetchAgain }) => {
         marginRight: "3px"
       }}
     ></div>
-    {console.log("on",onlineUsers)}
   </>
 )}
 
-  {console.log("ch", chat.users)}
 </Box>
 
                 

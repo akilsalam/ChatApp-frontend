@@ -2,6 +2,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React,{useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import END_POINT from '../../server';
 
 
 const Login = () => {
@@ -37,7 +38,7 @@ const Login = () => {
                 },
             }
             const {data} = await axios.post(
-                "http://localhost:5000/api/user/login",
+                `${END_POINT}/api/user/login`,
                 { email, password },
                 config
             );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FormControl, FormLabel, VStack, Input, InputGroup, InputRightElement, Button, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import END_POINT from '../../server';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -70,7 +71,7 @@ const SignUp = () => {
                 },
             };
             const userData = { name, email, password, pic };
-            const { data } = await axios.post('http://localhost:5000/api/user', userData, config);
+            const { data } = await axios.post(`${END_POINT}/api/user`, userData, config);
             toast({
                 title: 'Registration Successful',
                 status: 'success',

@@ -14,9 +14,10 @@ import animationData from "../Animations/Typing.json"
 import { CiImageOn } from "react-icons/ci";
 import { TiMicrophoneOutline } from "react-icons/ti";
 import voiceAnimation from "../Animations/voice.json"
+import END_POINT from '../server';
 
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = END_POINT;
 var socket, selectedChatCompare;
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
@@ -63,10 +64,9 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
             };
             setLoading(true)
 
-            const {data} = await axios.get(`http://localhost:5000/api/message/${selectedChat._id}`,
+            const {data} = await axios.get(`${END_POINT}/api/message/${selectedChat._id}`,
             config
             )
-            console.log(messages);
 
             setMessages(data)
             setLoading(false)
@@ -126,7 +126,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                     },
                 };
 
-                const {data} = await axios.post(`http://localhost:5000/api/message`,{
+                const {data} = await axios.post(`${END_POINT}/api/message`,{
                     content: newMessage,
                     chatId: selectedChat._id,
                 },
@@ -166,7 +166,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                 };
     
                 const { data } = await axios.post(
-                    `http://localhost:5000/api/message`,
+                    `${END_POINT}/api/message`,
                     {
                         content: base64data, // Send base64 data instead of the file
                         chatId: selectedChat._id,
@@ -275,7 +275,7 @@ const sendAudio = async (base64data) => {
         };
         console.log("audio",base64data);
         const { data } = await axios.post(
-            `http://localhost:5000/api/message`,
+            `${END_POINT}/api/message`,
             {
                 content:`blob:${base64data}`, 
                 chatId: selectedChat._id,
@@ -451,7 +451,7 @@ const sendAudio = async (base64data) => {
     />
     </div>
  :
-    <IconButton class="mic-toggle" id="mic" onClick={handleVoiceChat}>
+    <IconButton className="mic-toggle" id="mic" onClick={handleVoiceChat}>
         <TiMicrophoneOutline style={{color:"black"}} />
 
     </IconButton>

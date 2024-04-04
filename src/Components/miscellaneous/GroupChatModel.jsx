@@ -4,6 +4,7 @@ import { ChatState } from '../../Context/ChatProvider';
 import axios from 'axios';
 import UserListItem from '../UserAvatar/UserListItem';
 import UserBadgeItem from '../UserAvatar/UserBadgeItem';
+import END_POINT from '../../server';
 
 const GroupChatModel = ({children}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -29,7 +30,7 @@ const GroupChatModel = ({children}) => {
                     Authorization: `Bearer ${user.token}`,
                 },
             };
-            const { data } = await axios.get(`http://localhost:5000/api/user?search=${search}`, config);
+            const { data } = await axios.get(`${END_POINT}/api/user?search=${search}`, config);
 
             console.log(data);
             setLoading(false);
@@ -63,7 +64,7 @@ const GroupChatModel = ({children}) => {
                 },
             };
 
-            const {data } = await axios.post(`http://localhost:5000/api/chat/group`,{
+            const {data } = await axios.post(`${END_POINT}/api/chat/group`,{
                 name:groupChatName,
                 users: JSON.stringify(selectedUsers.map((u) => u._id)),
             },

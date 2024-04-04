@@ -12,6 +12,7 @@ import UserListItem from '../UserAvatar/UserListItem';
 import { getSender } from '../../Config/ChatLogics';
 import { Effect } from 'react-notification-badge';
 import NotificationBadge from 'react-notification-badge';
+import END_POINT from '../../server';
 
 const SideDrawer = () => {
   const [search,setSearch] = useState("")
@@ -47,7 +48,7 @@ const SideDrawer = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const {data} = await axios.get(`http://localhost:5000/api/user?search=${search}`,config)
+      const {data} = await axios.get(`${END_POINT}/api/user?search=${search}`,config)
       setLoading(false);
       setSearchResult(data)
     } catch (error) {
@@ -72,7 +73,7 @@ const SideDrawer = () => {
           Authorization: `Bearer ${user.token}`
         }
       };
-      const { data } = await axios.post(`http://localhost:5000/api/chat`,{ userId }, config)
+      const { data } = await axios.post(`${END_POINT}/api/chat`,{ userId }, config)
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats])
 

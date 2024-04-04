@@ -9,9 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
-import { getSender } from '../../Config/ChatLogics';
-import { Effect } from 'react-notification-badge';
-import NotificationBadge from 'react-notification-badge';
+// import { getSender } from '../../Config/ChatLogics';
+// import { Effect } from 'react-notification-badge';
+// import NotificationBadge from 'react-notification-badge';
 import END_POINT from '../../server';
 
 const SideDrawer = () => {
@@ -120,7 +120,7 @@ const SideDrawer = () => {
         </Text>
 
         <div>
-          <Menu>
+          {/* <Menu>
             <MenuButton p={1}>
               <NotificationBadge
                 count={notifications.length}
@@ -143,7 +143,7 @@ const SideDrawer = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu> */}
           <Menu>
             <MenuButton as={Button} rightIcon={<IoIosArrowDown />}>
                 <Avatar size={"sm"} cursor={"pointer"} name={user.name} src={user.pic} />

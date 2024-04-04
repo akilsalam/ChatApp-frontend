@@ -10,7 +10,7 @@ body{
 }
 
 .scroll{
-    height: 28rem;
+    height: 25rem;
 }
 
 /* @media screen and (max-width: 375px) {
@@ -19,6 +19,13 @@ body{
     }
   } */
   
+
+.messageMenu{
+    display: flex;
+    justify-content: end;
+    top: 0;
+    right: 1;
+}
 
 .mic-toggle{
     position: relative;

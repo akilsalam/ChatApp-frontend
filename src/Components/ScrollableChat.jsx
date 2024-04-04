@@ -1,14 +1,25 @@
-import React from 'react';
+import React, {useEffect,useState} from 'react';
 import ScrollToBottom from "react-scroll-to-bottom"
 import { isLastMessage, isSameSender, isSameSenderMargin } from '../Config/ChatLogics';
 import { ChatState } from '../Context/ChatProvider';
-import { Avatar, Tooltip } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, Tooltip } from '@chakra-ui/react';
 import { FiDownload } from "react-icons/fi";
+import { HiDotsHorizontal } from "react-icons/hi";
+import END_POINT from '../server';
+import io from "socket.io-client"
 
-const ScrollableChat = ({messages}) => {
+const ENDPOINT = END_POINT;
+var socket, selectedChatCompare;
+
+const ScrollableChat = ({ messages, handleDelete }) => {
 
     const {user} = ChatState();
-    
+
+
+    useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.emit("setup",user);
+    });
 
     const downloadImage = (content) => {
         const base64data = content.replace('data:image/jpeg;base64,', '');
@@ -43,9 +54,14 @@ const ScrollableChat = ({messages}) => {
         return blob;
       };      
 
+    
+    
+    
+
   return (
     <div>
         <ScrollToBottom className='scroll'>
+
 
         {messages && messages.map((m,i) => (
             <div 
@@ -76,6 +92,7 @@ const ScrollableChat = ({messages}) => {
                     </Tooltip>
                             </>
                 )}
+
                 <span style={{
                     backgroundColor: `${
                         m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
@@ -86,6 +103,24 @@ const ScrollableChat = ({messages}) => {
                     marginLeft: isSameSenderMargin(messages, m, i, user._id),
                     marginTop: isSameSender(messages, m, i, user._id) ? 3 : 10,
                 }}>
+                <div className='messageMenu'>
+                    {m.sender.name === user.name ?
+                <Accordion allowToggle>
+  <AccordionItem>
+    <h2>
+      <AccordionButton style={{padding:"0px"}}>
+        <HiDotsHorizontal />
+      </AccordionButton>
+    </h2>
+    <AccordionPanel onClick={() => handleDelete(m._id)} style={{ backgroundColor:"#fff", borderRadius:"10px", padding:"5px", cursor:"pointer" }}>
+  Delete this message
+</AccordionPanel>
+
+
+  </AccordionItem>
+</Accordion>
+                :null}
+                </div>
 {
     m.content && (
         m.isImage ? (

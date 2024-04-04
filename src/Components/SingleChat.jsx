@@ -150,6 +150,47 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
         }
     };
 
+    useEffect(() => {
+        // Listen for the 'message deleted' event
+        socket.on('message deleted', (deletedMessageId) => {
+            // Update messages state to remove the deleted message
+            const updatedMessages = messages.filter(message => message._id !== deletedMessageId);
+            setMessages(updatedMessages);
+        });
+    
+        return () => {
+            // Clean up by removing the event listener when component unmounts
+            socket.off('message deleted');
+        };
+    }, [messages]); // Include messages in the dependency array to re-register the event listener when messages state changes
+    
+    const handleDeleteMessage = async (messageId) => {
+        try {
+            const { data } = await fetch(`${END_POINT}/api/message/${messageId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ content: "This message was deleted" }),
+            });
+    
+            console.log('Message edited successfully', data);
+    
+            // Update messages after deleting the message
+            const updatedMessages = messages.map(message =>
+                message._id === messageId ? { ...message, content: "This message was deleted" } : message
+            );
+            setMessages(updatedMessages);
+    
+            // Emit event to inform other clients about the deleted message
+            socket.emit('delete message', messageId);
+        } catch (error) {
+            console.error('Error editing message:', error);
+        }
+    };
+    
+    
+
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -382,7 +423,7 @@ const sendAudio = async (base64data) => {
 
             ):(
                 <div className='messages'>
-                <ScrollableChat messages={messages} />
+                <ScrollableChat messages={messages} handleDelete={handleDeleteMessage} />
                 </div>
             )}
             <FormControl

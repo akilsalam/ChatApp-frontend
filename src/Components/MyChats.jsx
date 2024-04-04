@@ -170,7 +170,6 @@ const MyChats = ({ fetchAgain }) => {
     </div>
 )}
 
-
  
                 </Box>
                 

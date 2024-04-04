@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FormControl, FormLabel, VStack, Input, InputGroup, InputRightElement, Button, useToast } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import END_POINT from '../../server';
 
 const SignUp = () => {
@@ -13,7 +12,6 @@ const SignUp = () => {
     const [pic, setPic] = useState('');
     const [loading, setLoading] = useState(false);
     const toast = useToast();
-    const navigate = useNavigate();
 
     const handleTogglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -81,7 +79,6 @@ const SignUp = () => {
             });
             localStorage.setItem('userInfo', JSON.stringify(data));
             setLoading(false);
-            navigate('/chat');
             window.location.reload();
 
         } catch (error) {

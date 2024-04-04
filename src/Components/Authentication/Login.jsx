@@ -1,7 +1,6 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack, useToast } from '@chakra-ui/react';
 import React,{useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import END_POINT from '../../server';
 
 
@@ -11,7 +10,6 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading,setLoading] = useState(false)
     const toast = useToast()
-    const navigate = useNavigate()
 
     const handleTogglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -52,7 +50,6 @@ const Login = () => {
 
               localStorage.setItem("userInfo", JSON.stringify(data));
               setLoading(false)
-              navigate('/chat')
               window.location.reload();
               
         } catch (error) {

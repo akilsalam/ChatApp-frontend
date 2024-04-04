@@ -113,7 +113,7 @@ const ScrollableChat = ({messages}) => {
                         }
                         const blob = new Blob([bytes.buffer], { type: 'audio/webm;codecs=opus' });
                         const audioURL = window.URL.createObjectURL(blob);
-                        return <audio controls src={audioURL}></audio>;
+                        return <audio style={{width:"11.5rem"}} controls src={audioURL}></audio>;
                     } else {
                         return null; // No data after "blob:"
                     }

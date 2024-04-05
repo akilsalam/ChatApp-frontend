@@ -191,20 +191,27 @@ const MyChats = ({ fetchAgain }) => {
   display="flex" // Set display to flex
   alignItems="center" // Align items vertically
 >
-{onlineUsers.length > 0 && chat.users.length > 0 && (
-  <>
-    <div
-      style={{
-        background: onlineUsers.map((user) => user._id).includes(chat.users[1]._id) ? "green" : null,
-        width: "10px",
-        height: "10px",
-        display: "flex",
-        borderRadius: "100%",
-        marginRight: "3px"
-      }}
-    ></div>
-  </>
-)}
+{!chat.isGroupChat &&
+  onlineUsers.length > 0 &&
+  chat.users.length > 0 && (
+    <>
+      {chat.users.map((user) => (
+        <div
+          key={user._id}
+          style={{
+            background: onlineUsers.map((onlineUser) => onlineUser._id).includes(user._id) ? "green" : null,
+            width: "10px",
+            height: "10px",
+            display: "flex",
+            borderRadius: "100%",
+            marginRight: "3px"
+          }}
+        ></div>
+      ))}
+    </>
+  )
+}
+
 
 </Box>
 

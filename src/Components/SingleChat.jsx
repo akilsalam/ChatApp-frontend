@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChatState } from '../Context/ChatProvider';
 import { Box, Flex, FormControl, IconButton, Input, InputGroup, InputRightElement, Spinner, Text, useToast } from '@chakra-ui/react';
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -30,7 +30,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     const [isTyping,setIsTyping] = useState(false)
     const [isRecording, setIsRecording] = useState(false);
     const [recorder, setRecorder] = useState(null);
-    const [chunks, setChunks] = useState([]);
+    // const [chunks, setChunks] = useState([]);
     
     const defaultOptions = {
         loop:true,
@@ -235,6 +235,9 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     reader.readAsDataURL(file); // Read file as base64
 };
 
+// Define a ref for storing chunks
+const chunksRef = useRef([]);
+
 const handleVoiceChat = () => {
     if (!isRecording) {
         startRecording();
@@ -249,16 +252,13 @@ const startRecording = () => {
         .then((stream) => {
             const audioRecorder = new MediaRecorder(stream);
             audioRecorder.ondataavailable = (e) => {
-                const chunks = [];
+                // Access and update the chunks array via ref
+                const chunks = chunksRef.current;
                 chunks.push(e.data);
-                console.log("ch",chunks);
-                setChunks([...chunks]); // Set the state with a copy of the updated array
-                console.log("chu",chunks);
                 console.log("Received chunk:", e.data);
+                console.log("chunks",chunks);
             };
             audioRecorder.start();
-            console.log("Recording started");
-            console.log("chunks",chunks);
             setRecorder(audioRecorder);
         })
         .catch((error) => {
@@ -274,36 +274,27 @@ const startRecording = () => {
         });
 };
 
-
-
 const stopRecording = async () => {
     setIsRecording(false);
     if (recorder && recorder.state === "recording") {
         recorder.onstop = async () => {
-            console.log("CHE",chunks);
+            // Access the chunks array via ref
+            const chunks = chunksRef.current;
+            console.log("ch",chunks);
             const audioBlob = new Blob(chunks, { type: 'audio/webm;codecs=opus' });
-            console.log("Created Blob:", audioBlob);
-
             const reader = new FileReader();
             reader.onload = () => {
                 const base64data = reader.result.split(',')[1];
-                console.log("Base64 Data:", base64data);
                 sendAudio(base64data);
             };
-
-            // Read from the Blob inside the FileReader onload event
             reader.readAsDataURL(audioBlob);
-
-            // Clear chunks directly without relying on state update
-            chunks.length = 0;
-
+            chunks.length = 0; // Clear chunks
             setRecorder(null);
         };
-
         recorder.stop();
-        console.log("Recording stopped");
     }
 };
+
 
 
 const sendAudio = async (base64data) => {

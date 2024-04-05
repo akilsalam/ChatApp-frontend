@@ -27,7 +27,7 @@ const HomePage = () => {
   m="40px 0 15px 0" 
   borderRadius="lg" 
   borderWidth="1px">
-    <Text textAlign={"center"} fontSize={"larger"} fontFamily={"Work sans"} color={"black"} >Talk-A-Tive</Text>
+    <Text textAlign={"center"} fontSize={"2xl"} fontWeight={"900"} fontFamily={"Work sans"} color={"black"} >CHATIEST</Text>
   </Box>
   <Box 
   bg={"white"} 

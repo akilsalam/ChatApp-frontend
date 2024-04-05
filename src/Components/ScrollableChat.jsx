@@ -104,22 +104,21 @@ const ScrollableChat = ({ messages, handleDelete }) => {
                     marginTop: isSameSender(messages, m, i, user._id) ? 3 : 10,
                 }}>
                 <div className='messageMenu'>
-                    {m.sender.name === user.name ?
-                <Accordion allowToggle>
-  <AccordionItem>
-    <h2>
-      <AccordionButton style={{padding:"0px"}}>
-        <HiDotsHorizontal />
-      </AccordionButton>
-    </h2>
-    <AccordionPanel onClick={() => handleDelete(m._id)} style={{ backgroundColor:"#fff", borderRadius:"10px", padding:"5px", cursor:"pointer" }}>
-  Delete this message
-</AccordionPanel>
+                {m.sender.name === user.name && m.content !== "This Message was Deleted" ? (
+  <Accordion allowToggle>
+    <AccordionItem>
+      <h2>
+        <AccordionButton style={{ padding: "0px" }}>
+          <HiDotsHorizontal />
+        </AccordionButton>
+      </h2>
+      <AccordionPanel onClick={() => handleDelete(m._id)} style={{ backgroundColor: "#fff", borderRadius: "10px", padding: "5px", cursor: "pointer" }}>
+        Delete this message
+      </AccordionPanel>
+    </AccordionItem>
+  </Accordion>
+) : null}
 
-
-  </AccordionItem>
-</Accordion>
-                :null}
                 </div>
 {
     m.content && (

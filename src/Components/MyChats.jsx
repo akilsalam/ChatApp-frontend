@@ -151,7 +151,7 @@ const MyChats = ({ fetchAgain }) => {
                     </Text>
                     {chat.latestMessage && chat.latestMessage.content && (
     <div style={{ display: "flex", alignItems: "center" }}>
-        {chat.latestMessage.content.startsWith('/') ? (
+        {chat.latestMessage.isImage ? (
             <>
                 <CiImageOn style={{ fontSize: "15px", marginRight: "5px" }} />
                 <span style={{ fontSize: "12px" }}>Image</span>

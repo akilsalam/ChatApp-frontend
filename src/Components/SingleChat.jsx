@@ -132,7 +132,6 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                 },
                 config
                 );
-                console.log(data);
 
                 setNewMessage("")
                 socket.emit('new message',data);
@@ -255,8 +254,6 @@ const startRecording = () => {
                 // Access and update the chunks array via ref
                 const chunks = chunksRef.current;
                 chunks.push(e.data);
-                console.log("Received chunk:", e.data);
-                console.log("chunks",chunks);
             };
             audioRecorder.start();
             setRecorder(audioRecorder);
@@ -280,7 +277,6 @@ const stopRecording = async () => {
         recorder.onstop = async () => {
             // Access the chunks array via ref
             const chunks = chunksRef.current;
-            console.log("ch",chunks);
             const audioBlob = new Blob(chunks, { type: 'audio/webm;codecs=opus' });
             const reader = new FileReader();
             reader.onload = () => {
@@ -305,6 +301,7 @@ const sendAudio = async (base64data) => {
                 'Content-Type': 'application/json',
             },
         };
+        console.log(base64data.length);
         console.log("audio",base64data);
         const { data } = await axios.post(
             `${END_POINT}/api/message`,

@@ -1,4 +1,4 @@
-import { Box, Button, Tooltip,Text, Menu, MenuButton, Wrap, WrapItem, Avatar, MenuList, MenuItem, MenuDivider, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, useToast, Spinner } from '@chakra-ui/react';
+import { Box, Button, Tooltip,Text, Menu, MenuButton, Avatar, MenuList, MenuItem, MenuDivider, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, useToast, Spinner,} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { FaSearch } from "react-icons/fa";
 import { IoIosNotifications } from "react-icons/io";
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
-// import { getSender } from '../../Config/ChatLogics';
+import { getSender } from '../../Config/ChatLogics';
 // import { Effect } from 'react-notification-badge';
 // import NotificationBadge from 'react-notification-badge';
 import END_POINT from '../../server';
@@ -120,13 +120,14 @@ const SideDrawer = () => {
         </Text>
 
         <div>
-          {/* <Menu>
-            <MenuButton p={1}>
-              <NotificationBadge
+           <Menu>
+            <MenuButton p={1}> 
+              {/* <IoIosNotifications  style={{marginRight:"1rem",paddingTop:"10px",fontSize:"31px"}} />  */}
+              {/* <NotificationBadge
                 count={notifications.length}
                 effect={Effect.SCALE}
               />
-              <IoIosNotifications  style={{marginRight:"1rem",paddingTop:"10px",fontSize:"31px"}} />
+              <IoIosNotifications  style={{marginRight:"1rem",paddingTop:"10px",fontSize:"31px"}} />  */}
 
             </MenuButton>
             <MenuList display={"flex"} justifyContent={"center"}>
@@ -143,7 +144,7 @@ const SideDrawer = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu> */}
+          </Menu> 
           <Menu>
             <MenuButton as={Button} rightIcon={<IoIosArrowDown />}>
                 <Avatar size={"sm"} cursor={"pointer"} name={user.name} src={user.pic} />

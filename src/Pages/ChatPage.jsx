@@ -4,10 +4,21 @@ import { Box } from '@chakra-ui/react';
 import SideDrawer from '../Components/miscellaneous/SideDrawer';
 import MyChats from '../Components/MyChats';
 import ChatBox from '../Components/ChatBox';
+import { useNavigate } from 'react-router-dom';
 
 const ChatPage = () => {
   const { user } =ChatState();
   const [fetchAgain,setFetchAgain] = useState(false);
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+      const user = JSON.parse(localStorage.getItem("userInfo"));
+
+      if(!user) {
+          navigate("/")
+      }
+  },[navigate])
 
   return (
     <div style={{ width: "100%" }}>

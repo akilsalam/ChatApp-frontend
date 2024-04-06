@@ -195,11 +195,11 @@ const MyChats = ({ fetchAgain }) => {
   onlineUsers.length > 0 &&
   chat.users.length > 0 && (
     <>
-      {chat.users.map((user) => (
+      {/* {chat.users.map((user) => ( */}
         <div
-          key={user._id}
+          // key={user._id}
           style={{
-            background: onlineUsers.map((onlineUser) => onlineUser._id).includes(user._id) ? "green" : null,
+            background: onlineUsers.map((onlineUser) => onlineUser._id).includes(chat.users[1]._id) ? "green" : null,
             width: "10px",
             height: "10px",
             display: "flex",
@@ -207,7 +207,7 @@ const MyChats = ({ fetchAgain }) => {
             marginRight: "3px"
           }}
         ></div>
-      ))}
+      {/* ))} */}
     </>
   )
 }

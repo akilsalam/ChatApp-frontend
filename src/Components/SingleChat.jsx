@@ -15,10 +15,19 @@ import { CiImageOn } from "react-icons/ci";
 import { TiMicrophoneOutline } from "react-icons/ti";
 import voiceAnimation from "../Animations/voice.json"
 import END_POINT from '../server';
+import AWS from 'aws-sdk'
 
 
 const ENDPOINT = END_POINT;
 var socket, selectedChatCompare;
+
+AWS.config.update({
+    accessKeyId: 'AKIA2UC26SKLUQPSKID6',
+    secretAccessKey: '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',
+    region: process.env.AWS_REGION,
+});
+
+const s3 = new AWS.S3();
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
@@ -188,52 +197,52 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
         }
     };
     
-    
-
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
-        if (!file) return;
-    
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-            const base64data = reader.result.split(',')[1]; // Extract base64 data
-            try {
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                        'Content-Type': 'application/json',
-                    },
-                };
-    
-                const { data } = await axios.post(
-                    `${END_POINT}/api/message`,
-                    {
-                        content: base64data, // Send base64 data instead of the file
-                        chatId: selectedChat._id,
-                        isImage: true, // Optionally, you can send a flag indicating it's an image
-                    },
-                    config
-                );
-    
-            // Now, emit the image data to the server via socket.io
-            socket.emit('new message',data);
-            setMessages([...messages,data])
-    
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            toast({
-                title: 'Error Occurred!',
-                description: 'Failed to upload the image',
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
+      
+        if (!file) {
+          console.warn("No file selected");
+          // Handle no file selection (e.g., display error message)
+          return;
         }
-    };
-    reader.readAsDataURL(file); // Read file as base64
-};
+      
+        if (file.size === 0) {
+          console.warn("Selected file is empty");
+          // Handle empty file selection (e.g., display error message)
+          return;
+        }
+      
+        try {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              'Content-Type': 'multipart/form-data', // Set for file uploads
+            },
+          };
+      
+          const formData = new FormData();
+          formData.append('content', file); // Replace 'image' with desired key on backend
+          formData.append('chatId', selectedChat._id);
+          formData.append('isImage', true);
+      
+          const { data } = await axios.post(
+            `${END_POINT}/api/message`,
+            formData,
+            config
+          );
+      
+          // Now, emit the image data to the server via socket.io
+          socket.emit('new message', data);
+          setMessages([...messages, data]);
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          // Handle errors appropriately (e.g., display error message to user)
+        }
+      };
+      
 
+    
+    
 // Define a ref for storing chunks
 const chunksRef = useRef([]);
 
@@ -292,8 +301,65 @@ const stopRecording = async () => {
 };
 
 
-
 const sendAudio = async (base64data) => {
+    try {
+        // Convert base64 data to binary
+        const binaryData = atob(base64data);
+        const arrayBuffer = new ArrayBuffer(binaryData.length);
+        const view = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryData.length; i++) {
+            view[i] = binaryData.charCodeAt(i);
+        }
+        const audioBlob = new Blob([arrayBuffer], { type: 'audio/webm;codecs=opus' });
+
+        // Upload the audio file to S3
+        const s3 = new AWS.S3();
+        console.log("s3",s3);
+        const params = {
+            Bucket: 'akil-file-upload',
+            Key: `audio/${Date.now()}.webm`, // Example key, you may want to adjust it
+            Body: audioBlob,
+            ACL: 'public-read', // Adjust ACL as per your requirement
+        };
+        const s3Response = await s3.upload(params).promise();
+        const fileKey = s3Response.Key;
+
+            // Save the file key to the database
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                    'Content-Type': 'application/json',
+                },
+            };
+            const { data } = await axios.post(
+                `${END_POINT}/api/message`,
+                {
+                    content: fileKey, // Store the S3 file key in the database
+                    chatId: selectedChat._id,
+                },
+                config
+            );
+
+        // Now, emit the audio data to the server via socket.io
+        socket.emit('new message', data);
+        setMessages([...messages, data]);
+    } catch (error) {
+        console.error('Error uploading audio:', error);
+        toast({
+            title: 'Error Occurred!',
+            description: 'Failed to upload the audio',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+            position: 'bottom',
+        });
+    }
+};
+
+
+
+
+const sendAudio2 = async (base64data) => {
     try {
         const config = {
             headers: {

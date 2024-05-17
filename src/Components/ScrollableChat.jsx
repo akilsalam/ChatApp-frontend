@@ -59,13 +59,13 @@ const ScrollableChat = ({ messages, handleDelete }) => {
 
 
   return (
-    <div>
+    <div >
       <ScrollToBottom className='scroll'>
 
 
         {messages && messages.map((m, i) => (
           <div
-            style={{ display: "flex" }}
+            style={{ display: "flex", overflowY:"hidden"}}
             key={m._id}
 
           >
@@ -98,7 +98,7 @@ const ScrollableChat = ({ messages, handleDelete }) => {
                 }`,
               borderRadius: "10px",
               padding: "5px 15px",
-              // maxWidth:"75%",
+              maxWidth:"250px",
               marginLeft: isSameSenderMargin(messages, m, i, user._id),
               marginTop: isSameSender(messages, m, i, user._id) ? 3 : 10,
             }}>
